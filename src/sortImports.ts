@@ -1,5 +1,6 @@
 import * as ts from "typescript";
 import * as vscode from "vscode";
+import { mergeSection } from "./mergeSection";
 import {
   styleModuleRegExp,
   externalModuleRegExp,
@@ -20,8 +21,7 @@ class SortedImports {
 }
 
 export function sortImports(document: vscode.TextDocument): SortedImports {
-  let startPos = 0,
-    endPos = 0;
+  const posArr: [number, number][] = [];
   const sourceFile = ts.createSourceFile(
     "example.ts",
     document.getText(),
@@ -37,6 +37,7 @@ export function sortImports(document: vscode.TextDocument): SortedImports {
   const otherModuleImport: ts.ImportDeclaration[] = [];
   ts.forEachChild(sourceFile, node => {
     if (ts.isImportDeclaration(node)) {
+      posArr.push([node.pos, node.end]);
       const filename = node.moduleSpecifier.getText(sourceFile);
       if (styleModuleRegExp.test(filename)) {
         styleModuleImport.push(node);
@@ -66,6 +67,8 @@ export function sortImports(document: vscode.TextDocument): SortedImports {
     .filter(item => item.length)
     .map(arr => arr.map(item => item.getText(sourceFile)).join("\n"))
     .join("\n\n");
+
+  const [startPos, endPos] = mergeSection(posArr);
   return new SortedImports(
     new vscode.Range(
       document.positionAt(startPos),

@@ -1,4 +1,5 @@
 import * as ts from "typescript";
+import { mergeSection } from "./mergeSection";
 import {
   externalModuleRegExp,
   styleModuleRegExp,
@@ -31,8 +32,7 @@ import {
 `;
 
 export function sortImports(sourceCode: string) {
-  let startPos = 0,
-    endPos = 0;
+  const posArr: [number, number][] = [];
   const sourceFile = ts.createSourceFile(
     "example.ts",
     sourceCode,
@@ -48,6 +48,7 @@ export function sortImports(sourceCode: string) {
   const otherModuleImport: ts.ImportDeclaration[] = [];
   ts.forEachChild(sourceFile, node => {
     if (ts.isImportDeclaration(node)) {
+      posArr.push([node.pos, node.end]);
       const filename = node.moduleSpecifier.getText(sourceFile);
       if (styleModuleRegExp.test(filename)) {
         styleModuleImport.push(node);
@@ -78,6 +79,8 @@ export function sortImports(sourceCode: string) {
     .filter(item => item.length)
     .map(arr => arr.map(item => item.getText(sourceFile)).join("\n"))
     .join("\n\n");
+  const [startPos, endPos] = mergeSection(posArr);
+  console.log([startPos, endPos]);
   console.log(newValue);
 }
 
