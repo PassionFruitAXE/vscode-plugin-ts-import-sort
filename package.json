@@ -6,7 +6,7 @@
   "publisher": "passionfruit",
   "icon": "images/typescript.png",
   "engines": {
-    "vscode": "^0.10.x"
+    "vscode": "^1.10.0"
   },
   "repository": {
     "type": "git",
@@ -41,7 +41,7 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^0.10.0",
+    "@types/vscode": "^1.10.0",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "16.x",
