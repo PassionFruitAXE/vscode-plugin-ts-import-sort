@@ -2,7 +2,7 @@
   "name": "ts-sort-import",
   "displayName": "ts-sort-import",
   "description": "TypeScript sort import plugin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "passionfruit",
   "icon": "images/typescript.png",
   "engines": {
@@ -25,7 +25,7 @@
     "commands": [
       {
         "command": "extension.typescriptSortImport",
-        "title": "SortTSImport"
+        "title": "sort"
       }
     ]
   },
